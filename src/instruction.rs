@@ -1,19 +1,21 @@
 use solana_program::program_error::ProgramError;
 use std::convert::TryInto;
-use chrono::prelude::*;
 
 use crate::error::TokenError::InvalidInstruction;
 use crate::error::TokenError;
 
+/// Initialize TokenABC.
 pub struct TokenABC {
     amount: u64,
 }
 
+/// Initialize TokenABCFuture.
 pub struct TokenABCFuture {
     amount: u64,
     time: u64,
 }
 
+/// Instructions supported by the token program.
 pub enum AdvanceTokenInstruction {
     InitializeABCToken(TokenABC),
     InitializeABCTokenFuture(TokenABCFuture),
@@ -21,6 +23,7 @@ pub enum AdvanceTokenInstruction {
 }
 
 impl AdvanceTokenInstruction {
+    /// Unpacks a byte buffer.
     pub fn unpack(input: &[u8]) -> Result<Self, ProgramError> {
         let (tag, rest) = input.split_first().ok_or(InvalidInstruction)?;
 
@@ -58,8 +61,8 @@ impl AdvanceTokenInstruction {
 
             2 => {
                 let mut token_abc = TokenABC { amount: 0 };
-                let mut token_abc_future = TokenABCFuture { amount: 0, time: 15 };
-                let current_time = utc::now();
+                let mut token_abc_future = TokenABCFuture { amount: 0, time: 1500 };
+                let current_time = 5000;
                 if current_time > token_abc_future.time {
                     token_abc.amount += token_abc_future.amount;
                     token_abc_future.amount = 0;

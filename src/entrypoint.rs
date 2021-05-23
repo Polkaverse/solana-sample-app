@@ -4,7 +4,10 @@ use solana_program::{
 
 use crate::processor::Processor;
 
+// Declare and export the program's entrypoint
 entrypoint!(process_instruction);
+
+// Program entrypoint's implementation
 fn process_instruction(
     program_id: &Pubkey,
     accounts: &[AccountInfo],

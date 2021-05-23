@@ -1,3 +1,4 @@
+/// Program state processor.
 
 use solana_program::{
     account_info::{next_account_info, AccountInfo},
@@ -5,64 +6,61 @@ use solana_program::{
     msg,
     program::{invoke, invoke_signed},
     program_error::ProgramError,
-    program_pack::{IsInitialized, Pack},
+    program_pack::{IsInitialized },
     pubkey::Pubkey,
     sysvar::{rent::Rent, Sysvar},
 };
 
-use spl_token::state::Account as TokenAccount;
+use crate::{instruction::AdvanceTokenInstruction };
+use crate::instruction::{TokenABC, TokenABCFuture};
 
-use crate::{error::TokenError, instruction::AdvanceTokenInstruction };
-
+/// Program state handler.
 pub struct Processor;
+
 impl Processor {
     pub fn process(
         program_id: &Pubkey,
         accounts: &[AccountInfo],
         instruction_data: &[u8],
     ) -> ProgramResult {
+        /// Unpack the instructions.
         let instruction = AdvanceTokenInstruction::unpack(instruction_data)?;
 
         match instruction {
-            AdvanceTokenInstruction::InitializeABCToken {
-                ..
-            } => {
+            AdvanceTokenInstruction::InitializeABCToken(token) => {
                 msg!("Instruction: InitializeABCToken");
-                Self::process_init_token(accounts, amount, program_id)
+                Self::process_init_token(token)
             }
-            AdvanceTokenInstruction::InitializeABCTokenFuture { .. } => {
+            AdvanceTokenInstruction::InitializeABCTokenFuture(future_token) => {
                 msg!("Instruction: InitializeABCTokenFuture");
-                Self::process_init_future_token(accounts, amount, program_id)
+                Self::process_init_future_token(future_token)
             }
-            AdvanceTokenInstruction::BurnABCFutureAndMintABC {  .. } => {
+            AdvanceTokenInstruction::BurnABCFutureAndMintABC(token) => {
                 msg!("Instruction: BurnABCFutureAndMintABC");
-                Self::process_init_burn_token(accounts, amount, program_id)
+                Self::process_init_burn_token(token)
             }
         }
     }
 
+    /// Initialize the token.
     fn process_init_token(
-        accounts: &[AccountInfo],
-        amount: u64,
-        program_id: &Pubkey,
+        future_token: TokenABC,
     ) -> ProgramResult {
 
         Ok(())
     }
 
+    /// Initialize the future token with Date/time.
     fn process_init_future_token(
-        accounts: &[AccountInfo],
-        amount: u64,
-        program_id: &Pubkey,
+        token: TokenABCFuture,
     ) -> ProgramResult {
 
         Ok(())
     }
 
+    /// Burn the token.
     fn process_init_burn_token(
-        accounts: &[AccountInfo],
-        amount: u64,
-        program_id: &Pubkey,
+        token: TokenABC,
     ) -> ProgramResult {
 
         Ok(())
